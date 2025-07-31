@@ -6,11 +6,11 @@ Python was used to generate encrypted and unencrypted test files, simulate reali
 
 ## Folder Overview
 
-- `python_scripts/` – Python files used to generate and process the data  
-- `sample_data/` – Simulated CSV files (Unencrypted, ECC, RSA-FHE)  
-- `output_data/` – Combined dataset for statistical testing  
-- `spss_outputs/` – Output from IBM SPSS  
-- `documentation/` – Variable descriptions, requirements, and license
+- `1_python_scripts/` – Python files used to generate and process the data  
+- `2_sample_data/` – Simulated CSV files (Unencrypted, ECC, RSA-FHE)  
+- `3_output_data/` – Combined dataset for statistical testing  
+- `4_spss_outputs/` – Output from IBM SPSS  
+- `5_documentation/` – Variable descriptions, requirements, and license
 
 All simulations were performed offline and no real patient data was used.
 
