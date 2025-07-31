@@ -14,7 +14,18 @@ Python was used to generate encrypted and unencrypted test files, simulate reali
 
 All simulations were performed offline and no real patient data was used.
 
-To see DescriptiveStatisticsOutput.pdf, One-WayANOVAOutput.pdf, and/or TukeyOutput.pdf download the files.
+To see DescriptiveStatisticsOutput.pdf, One-WayANOVAOutput.pdf, and/or TukeyOutput.pdf download the files. 
+
+Here are the individual links:
+
+Descriptive Statistics Output
+https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation/raw/main/4_spss_outputs/DescriptiveStatisticsOutput.pdf
+
+One-Way ANOVA Output
+https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation/raw/main/4_spss_outputs/One-WayANOVAOutput.pdf
+
+Tukey HSD Post-Hoc Output
+https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation/raw/main/4_spss_outputs/TukeyOutput.pdf
 ---
 
 ## Citation
