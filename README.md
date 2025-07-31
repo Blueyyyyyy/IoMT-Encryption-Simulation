@@ -6,7 +6,6 @@ Python was used to generate encrypted and unencrypted test files, simulate reali
 
 ## Folder Overview
 
-- `unencrypted_baseline/` – Contains the 40 baseline CSV files with no encryption applied.
 - `python_scripts/` – Python files used to generate and process the data
 - `sample_data/` – Simulated CSV files representing unencrypted, ECC, and RSA-FHE traffic
 - `output_data/` – Combined summary dataset used for statistical testing
