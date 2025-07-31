@@ -1,0 +1,7 @@
+Variable Name                Description
+------------------------------------------------------------
+environment                  Identifier for each test environment (e.g., ENV-01 to ENV-40).
+encryption_type              Encryption condition: Unencrypted, ECC, or RSA-FHE.
+file_size_kb                 Size of the CSV file in kilobytes.
+avg_row_length_bytes         Average message payload size (row length in bytes).
+simulated_encryption_time_sec  Simulated encryption time in seconds.
