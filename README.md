@@ -6,11 +6,10 @@ Python was used to generate encrypted and unencrypted test files, simulate reali
 
 ## Folder Overview
 
-- `unencrypted_baseline/` – Contains the 40 baseline CSV files with no encryption applied.
-- `python_scripts/` – Python files used to generate and process the data
-- `sample_data/` – Simulated CSV files representing unencrypted, ECC, and RSA-FHE traffic
-- `output_data/` – Combined summary dataset used for statistical testing
-- `spss_outputs/` – Statistical analysis output from IBM SPSS
+- `python_scripts/` – Python files used to generate and process the data  
+- `sample_data/` – Simulated CSV files (Unencrypted, ECC, RSA-FHE)  
+- `output_data/` – Combined dataset for statistical testing  
+- `spss_outputs/` – Output from IBM SPSS  
 - `documentation/` – Variable descriptions, requirements, and license
 
 All simulations were performed offline and no real patient data was used.
