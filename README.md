@@ -14,6 +14,7 @@ Python was used to generate encrypted and unencrypted test files, simulate reali
 
 All simulations were performed offline and no real patient data was used.
 
+To see DescriptiveStatisticsOutput.pdf, One-WayANOVAOutput.pdf, and/or TukeyOutput.pdf download the files.
 ---
 
 ## Citation
