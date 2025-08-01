@@ -33,4 +33,4 @@ https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation/raw/main/4_spss_outputs
 
 ## Citation
 
-If you use or reference this work, please cite the GitHub repository or Anderson, D. (2025). IoMT encryption simulation dataset and Python scripts (Version 1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.16659484
+If you use or reference this work, please cite the GitHub repository, CITATION.cff, citation.bib, or Anderson, D. (2025). IoMT encryption simulation dataset and Python scripts (Version 1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.16659484
