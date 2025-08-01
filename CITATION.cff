@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this dataset or scripts in your research, please cite the following:"
+title: "IoMT Encryption Simulation Dataset and Python Scripts"
+authors:
+  - family-names: Anderson
+    given-names: Devin
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+version: "1.0"
+doi: 10.5281/zenodo.16659484
+date-released: 2024-07-18
+url: "https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation"
+repository-code: "https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation"
+license: MIT
+keywords:
+  - IoMT
+  - Encryption
+  - RSA-FHE
+  - ECC
+  - Python
+  - SPSS
+  - Simulation
+  - Healthcare Cybersecurity
+type: dataset
