@@ -1,5 +1,7 @@
 # IoMT Encryption Simulation
 
+[![DOI](https://zenodo.org/badge/1029379486.svg)](https://doi.org/10.5281/zenodo.16659484)
+
 This repository contains all the code and data used for my doctoral dissertation research on encryption performance in Internet of Medical Things (IoMT) systems. The study compares unencrypted data, ECC encryption, and RSA-based fully homomorphic encryption (FHE) using simulated network environments.
 
 Python was used to generate encrypted and unencrypted test files, simulate realistic encryption latency, and calculate metrics such as file size, row density, and encryption time. These metrics were then analyzed using IBM SPSS.
@@ -31,4 +33,4 @@ https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation/raw/main/4_spss_outputs
 
 ## Citation
 
-If you use or reference this work, please cite the GitHub repository or final dissertation DOI (coming soon).
+If you use or reference this work, please cite the GitHub repository or Anderson, D. (2025). IoMT encryption simulation dataset and Python scripts (Version 1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.16659484
