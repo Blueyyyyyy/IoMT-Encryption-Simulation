@@ -62,10 +62,10 @@ for root, _, files in os.walk(base_path):
                     full_path = os.path.join(root, filename)
                     df = pd.read_csv(full_path)
 
-                    print(f"🔐 Simulating RSA-based FHE for ENV-{env_num}...")
+                    print(f"Simulating RSA-based FHE for ENV-{env_num}...")
                     encrypted_df = simulate_rsa_fhe_encryption(df)
                     output_file = f"rsa_fhe_encrypted_ENV-{env_num}.csv"
                     encrypted_df.to_csv(os.path.join(output_dir, output_file), index=False)
                     print(f"✅ Saved: {output_file}")
             except Exception as e:
-                print(f"❌ Error with {filename}: {e}")
+                print(f"Error with {filename}: {e}")
