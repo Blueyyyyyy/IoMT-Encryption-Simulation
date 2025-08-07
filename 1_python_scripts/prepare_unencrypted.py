@@ -18,9 +18,9 @@ for root, _, files in os.walk(base_path):
                     src_path = os.path.join(root, filename)
                     dst_path = os.path.join(output_dir, filename)
                     shutil.copy2(src_path, dst_path)
-                    print(f"📁 Copied: {filename}")
+                    print(f"Copied: {filename}")
                     copied += 1
             except Exception as e:
-                print(f"⚠️ Error processing {filename}: {e}")
+                print(f"Error processing {filename}: {e}")
 
-print(f"✅ Finished. Total files copied: {copied}")
+print(f"Finished. Total files copied: {copied}")
