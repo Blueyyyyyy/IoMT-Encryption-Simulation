@@ -51,11 +51,11 @@ for encryption_type, folder_name in folders.items():
                 })
 
             except Exception as e:
-                print(f"⚠️ Skipped {filename}: {e}")
+                print(f"Skipped {filename}: {e}")
 
 #Save Summary to CSV
 summary_df = pd.DataFrame(summary)
 output_path = os.path.join(base_path, "encryption_performance_summary.csv")
 summary_df.to_csv(output_path, index=False)
 
-print(f"\n✅ Metrics collected and saved to: {output_path}")
+print(f"\nMetrics collected and saved to: {output_path}")
