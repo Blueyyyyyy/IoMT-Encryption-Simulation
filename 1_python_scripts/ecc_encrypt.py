@@ -59,4 +59,4 @@ for root, _, files in os.walk(base_path):
 
                 output_path = os.path.join(output_base, f"encrypted_simulated_ENV-{env_number:02d}.csv")
                 df.to_csv(output_path, index=False)
-                print(f"✅ Encrypted and saved: {output_path}")
+                print(f"Encrypted and saved: {output_path}")
