@@ -4,7 +4,7 @@
 
 ## Correction Notice
 
-I am updating this repository to correct the RSA-based simulated homomorphic encryption output files and the related statistical analysis. Version 1.0 is preserved for transparency but should not be used for final analysis. A corrected Version 2.0 will replace it.
+I am updating this repository to correct the RSA-based simulated homomorphic encryption output files and the related statistical analysis. Version 1.0 is preserved for transparency but should not be used for final analysis. A corrected Version 2.0 will replace it. 
 
 This repository contains all the code and data used for my doctoral dissertation research on encryption performance in Internet of Medical Things (IoMT) systems. The study compares unencrypted data, ECC encryption, and RSA-based fully homomorphic encryption (FHE) using simulated network environments.
 
