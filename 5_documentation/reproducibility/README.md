@@ -262,7 +262,7 @@ encryption_type
 file_size_kb
 avg_row_length_bytes
 simulated_encryption_time_sec
-clear_text_exposure_pct
+cleartext_exposure_pct
 
 See:
 
