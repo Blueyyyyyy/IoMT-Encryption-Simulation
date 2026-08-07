@@ -288,7 +288,7 @@ def process_condition(condition):
                 "file_size_kb": round(file_size_bytes / 1024, 6),
                 "avg_row_length_bytes": round(average_length, 6),
                 "simulated_encryption_time_sec": round(recorded_time, 9),
-                "cleartext_exposure_percent": round(exposure, 6),
+                "cleartext_exposure_pct": round(exposure, 6),
                 "row_count": expected_row_count,
                 "column_count": expected_column_count,
                 "source_file": source_path.name,
