@@ -48,8 +48,9 @@ IoMT-Encryption-Simulation/
 ├── LICENSE
 ├── README.md
 └── requirements.txt
-'''</> 
-##Software Environment
+'''
+
+## Software Environment
 
 The original Version 2 timing measurements were produced using:
 
@@ -68,7 +69,7 @@ Approximately 16 GB physical memory
 
 Exact encryption timing values may differ on other hardware or software environments.
 
-Clone the Repository
+## Clone the Repository
 
 Clone the repository and enter the project directory:
 
@@ -80,7 +81,7 @@ Use the corrected Version 2 branch when reproducing the correction work:
 git checkout correction-v2
 Create a Python Environment
 
-Create a Python virtual environment:
+## Create a Python virtual environment:
 
 python -m venv .venv
 
@@ -95,7 +96,7 @@ pip install -r requirements.txt
 
 The root-level requirements.txt contains the package versions required for the corrected Version 2 workflow.
 
-##Source Data
+## Source Data
 
 The original synthetic source CSV files belong in:
 
@@ -114,7 +115,7 @@ ENV-26 to ENV-40	RSA-SHE	15
 
 The same synthetic source structure was used to support controlled comparison across the three conditions.
 
-##Protected Transmission Fields
+## Protected Transmission Fields
 
 Nine data fields were treated as protected values:
 
@@ -134,7 +135,7 @@ Column headings were not treated as protected values.
 
 Row count and column order were retained.
 
-##Unencrypted Condition
+## Unencrypted Condition
 
 ENV-01 through ENV-10 form the unencrypted baseline.
 
@@ -151,7 +152,7 @@ clear-text exposure = 100%
 
 The zero encryption-time value represents the absence of an encryption operation.
 
-##Simulated ECC Condition
+## Simulated ECC Condition
 
 ENV-11 through ENV-25 form the simulated ECC condition.
 
@@ -174,7 +175,7 @@ The output is stored under:
 The expected clear-text exposure result is:
 
 0%
-##RSA-SHE Condition
+## RSA-SHE Condition
 
 ENV-26 through ENV-40 form the RSA-SHE condition.
 
@@ -200,7 +201,7 @@ Reproduce the computational behavior of BFV, BGV, CKKS, or another production-gr
 The expected clear-text exposure result is:
 
 0%
-##Encryption Timing Procedure
+## Encryption Timing Procedure
 
 Timing is performed only for the encrypted conditions.
 
@@ -232,7 +233,7 @@ For simulated ECC, new AES-GCM nonces are generated for every protected-value en
 
 No artificial latency, sleep() commands, or manually assigned timing values are used in Version 2.
 
-##Clear-Text Exposure
+## Clear-Text Exposure
 
 Clear-text exposure is calculated across the nine protected transmission fields.
 
@@ -252,7 +253,7 @@ RSA-SHE	0%
 
 A value is counted as exposed only when the protected output value remains readable and unchanged from the corresponding original source value.
 
-##Version 2 Metrics
+## Version 2 Metrics
 
 The analysis-ready dataset contains the following primary variables:
 
@@ -277,16 +278,16 @@ Condition-level timing and validation information is retained under:
 The dataset used for statistical analysis is retained under:
 
 3_output_data/analysis_ready/
-Validation Checks
+## Validation Checks
 
-##Before statistical analysis, confirm the following.
+Before statistical analysis, confirm the following.
 
 Group Counts
 Unencrypted = 10
 ECC = 15
 RSA-SHE = 15
 Total = 40
-Encryption Completeness
+## Encryption Completeness
 
 For both encrypted conditions:
 
@@ -295,14 +296,14 @@ No protected value remains readable and unchanged.
 Row counts remain unchanged.
 Column order remains unchanged.
 Encryption errors are not silently substituted into the dataset.
-Clear-Text Exposure
+## Clear-Text Exposure
 
 Expected values are:
 
 Unencrypted = 100%
 ECC = 0%
 RSA-SHE = 0%
-Timing
+## Timing
 
 For each encrypted environment:
 
@@ -311,9 +312,9 @@ Five timed runs are recorded.
 All retained timed-run values are actual measured elapsed times.
 The median of the five runs is the analytical value.
 No artificial processing delays are present.
-Statistical Analysis
+## Statistical Analysis
 
-##IBM SPSS Statistics is used for the corrected Version 2 inferential analysis.
+IBM SPSS Statistics is used for the corrected Version 2 inferential analysis.
 
 The final SPSS syntax is stored under:
 
@@ -325,7 +326,7 @@ Use the final Version 2 analysis-ready dataset from:
 
 The corrected procedures are:
 
-File Size
+## File Size
 
 Use:
 
@@ -338,7 +339,7 @@ F(2, 18.667) = 79.262, p < .001
 
 All three file-size pairwise comparisons should be statistically significant.
 
-Average Row Length
+## Average Row Length
 
 Use:
 
@@ -354,7 +355,7 @@ Expected adjusted pairwise results:
 Unencrypted vs ECC:      p = .017
 Unencrypted vs RSA-SHE:  p < .001
 ECC vs RSA-SHE:          p = .001
-Simulated Encryption Time
+## Simulated Encryption Time
 
 Use:
 
@@ -370,7 +371,7 @@ Expected adjusted pairwise results:
 Unencrypted vs ECC:      p = .025
 Unencrypted vs RSA-SHE:  p < .001
 ECC vs RSA-SHE:          p = .001
-Clear-Text Exposure
+## Clear-Text Exposure
 
 Evaluate clear-text exposure descriptively.
 
@@ -378,7 +379,7 @@ Do not conduct an inferential ECC-versus-RSA-SHE test because both encrypted con
 
 0% exposure
 0 within-group variance
-Expected Descriptive Results
+## Expected Descriptive Results
 
 The corrected Version 2 results are:
 
@@ -393,17 +394,17 @@ Condition	File Size SD	Average Row Length SD	Encryption Time SD
 Unencrypted	0.005922	0.006064	0.000000000
 ECC	1186.218687	0.000000	0.039449822
 RSA-SHE	12089.403372	0.000000	0.974129258
-Hypothesis Decisions
+## Hypothesis Decisions
 
-##The reproduced Version 2 analysis should support the following decisions.
+The reproduced Version 2 analysis should support the following decisions.
 
-Research Question 1
+## Research Question 1
 
 Reject the null hypothesis.
 
 RSA-SHE differs significantly from the unencrypted condition in the operationalized network-traffic measures of file size and average row length.
 
-Research Question 2
+## Research Question 2
 
 Do not reject the null hypothesis.
 
@@ -411,7 +412,7 @@ Both simulated ECC and RSA-SHE produce 0% clear-text exposure.
 
 RSA-SHE is not shown to improve the measured confidentiality outcome beyond simulated ECC.
 
-Research Question 3
+## Research Question 3
 
 Reject the null hypothesis for all three operationalized performance measures.
 
@@ -423,7 +424,7 @@ Simulated encryption time
 
 RSA-SHE produces the larger values for all three measured performance outcomes.
 
-##Interpretation Boundary
+## Interpretation Boundary
 
 Successful reproduction of these results demonstrates reproduction of the controlled Version 2 simulation and statistical analysis.
 
