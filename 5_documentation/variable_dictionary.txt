@@ -1,7 +1,236 @@
-Variable Name                Description
-------------------------------------------------------------
-environment                  Identifier for each test environment (e.g., ENV-01 to ENV-40).
-encryption_type              Encryption condition: Unencrypted, ECC, or RSA-FHE.
-file_size_kb                 Size of the CSV file in kilobytes.
-avg_row_length_bytes         Average message payload size (row length in bytes).
-simulated_encryption_time_sec  Simulated encryption time in seconds.
+IoMT Encryption Simulation
+Version 2 Variable Dictionary
+
+This variable dictionary describes the analytical variables used in the corrected Version 2
+dataset for the IoMT encryption simulation study.
+
+The study included 40 simulated always-operating IoMT environments distributed across
+three experimental conditions:
+
+Unencrypted: 10 environments
+ECC:         15 environments
+RSA-SHE:     15 environments
+
+RSA-SHE refers to the RSA-based simulated homomorphic encryption condition used in
+this study. The condition used RSA-OAEP with SHA-256. It did not perform computations
+on ciphertext and was not an implementation of fully or partially homomorphic encryption.
+
+
+Variable Name:
+environment
+
+Description:
+Identifier assigned to each simulated IoMT test environment.
+
+Expected Values:
+ENV-01 through ENV-40
+
+Measurement Level:
+Identifier / nominal
+
+Notes:
+Each environment represents one simulated organizational IoMT test configuration.
+The environments were created synthetically and were not sampled from actual healthcare
+organizations.
+
+
+Variable Name:
+encryption_type
+
+Description:
+Experimental encryption condition assigned to the simulated IoMT environment.
+
+Expected Values:
+Unencrypted
+ECC
+RSA-SHE
+
+Measurement Level:
+Categorical / nominal
+
+Group Sizes:
+Unencrypted = 10
+ECC = 15
+RSA-SHE = 15
+
+Notes:
+Unencrypted represents the baseline condition with no encryption operation.
+
+ECC refers to the simulated ECC condition. The implementation used Elliptic Curve
+Diffie-Hellman (ECDH) with the SECP384R1 curve, HKDF with SHA-256, and AES-256-GCM
+to encrypt protected values. A new nonce was generated for each protected value.
+
+RSA-SHE refers to the RSA-based simulated homomorphic encryption condition. RSA-OAEP
+with SHA-256 was applied to protected values. RSA-SHE did not perform homomorphic
+computation and should not be interpreted as production-grade FHE or PHE.
+
+
+Variable Name:
+file_size_kb
+
+Analysis Label:
+File Size (KB)
+
+Description:
+Total size of the generated simulated transmission output file, measured in kilobytes.
+
+Measurement Level:
+Continuous / ratio
+
+Unit:
+Kilobytes (KB)
+
+Interpretation:
+File size was used as an indicator of ciphertext expansion and transmission/storage demand.
+Larger values represent larger generated transmission outputs.
+
+Notes:
+The variable reflects the output produced by the tested implementation and should not be
+interpreted as a universal file-size requirement for ECC, RSA, or production-grade FHE.
+
+
+Variable Name:
+avg_row_length_bytes
+
+Analysis Label:
+Avg. Row Length (Bytes)
+
+Description:
+Average number of bytes contained in each simulated transmission row or record.
+
+Measurement Level:
+Continuous / ratio
+
+Unit:
+Bytes
+
+Interpretation:
+Average row length was used as an indicator of simulated message payload size and encrypted
+transmission-record growth.
+
+Notes:
+Larger values indicate greater data expansion within the generated transmission records.
+
+
+Variable Name:
+simulated_encryption_time_sec
+
+Analysis Label:
+Simulated Encryption Time (s)
+
+Description:
+Actual elapsed processing time required to complete the condition-specific encryption process
+within the Python-based simulation.
+
+Measurement Level:
+Continuous / ratio
+
+Unit:
+Seconds
+
+Timing Method:
+Python time.perf_counter()
+
+Procedure:
+One untimed warm-up run was completed for each simulated encrypted environment.
+Five timed runs were then completed.
+The median of the five timed runs was retained as the analytical value.
+
+Timing began immediately before condition-specific cryptographic key generation and
+encryption and ended after the complete encrypted data structure was produced.
+
+Cryptographic key generation was included within the timed interval.
+
+Source-file loading and output-file writing were excluded from the timed interval.
+
+New cryptographic keys were generated for each timed run.
+
+For the simulated ECC condition, a new AES-GCM nonce was generated for every protected
+value encryption operation.
+
+No artificial processing delays, sleep() commands, or artificial latency values were used
+to produce the Version 2 timing results.
+
+The unencrypted condition was recorded as 0 seconds because no encryption operation was
+performed.
+
+Interpretation:
+This variable represents implementation-specific computational processing time on the
+documented study computer.
+
+It should not be interpreted as the execution time of production-grade fully homomorphic
+encryption.
+
+
+Variable Name:
+clear_text_exposure_pct
+
+Analysis Label:
+Clear-Text Exposure (%)
+
+Description:
+Percentage of protected data values that remained readable and unchanged in the generated
+transmission output when compared with the original source data.
+
+Measurement Level:
+Continuous / ratio
+
+Unit:
+Percent
+
+Protected Values:
+All data cells under the following nine transmission fields were included:
+
+1. Organization identifier
+2. Device identifier
+3. Timestamp
+4. Heart rate
+5. Systolic blood pressure
+6. Diastolic blood pressure
+7. Oxygen saturation
+8. Temperature
+9. Battery level
+
+Column headings were excluded from the calculation.
+
+Calculation:
+Clear-text exposure (%) =
+(readable and unchanged protected values / total protected values) x 100
+
+Interpretation:
+100% indicates that all protected values remained readable and unchanged.
+0% indicates that no protected values remained readable and unchanged.
+
+Version 2 Results:
+Unencrypted = 100%
+ECC         = 0%
+RSA-SHE     = 0%
+
+Notes:
+Both encrypted conditions produced 0% clear-text exposure.
+
+Because ECC and RSA-SHE produced the same measured clear-text exposure result, the study
+did not demonstrate an additional confidentiality advantage for RSA-SHE over simulated ECC
+on this measure.
+
+
+Version 2 Scope Note
+
+The variables in this dictionary describe outcomes from a controlled simulation using
+synthetic data.
+
+The study did not directly measure:
+
+- Power consumption
+- Battery consumption
+- Physical device performance
+- Packet interception
+- Malware resistance
+- Denial-of-service resistance
+- Key compromise
+- Quantum resistance
+- Homomorphic computation
+- Production-grade FHE performance
+
+Results should therefore be interpreted as implementation-specific measurements from the
+controlled Version 2 simulation.
