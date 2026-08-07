@@ -282,13 +282,13 @@ def process_condition(condition):
 
         analysis_records.append(
             {
-                "environment_id": environment_id,
+                "environment": environment_id,
                 "encryption_code": condition["code"],
                 "encryption_type": condition["name"],
                 "file_size_kb": round(file_size_bytes / 1024, 6),
-                "average_row_length_bytes": round(average_length, 6),
+                "avg_row_length_bytes": round(average_length, 6),
                 "simulated_encryption_time_sec": round(recorded_time, 9),
-                "clear_text_exposure_percent": round(exposure, 6),
+                "cleartext_exposure_percent": round(exposure, 6),
                 "row_count": expected_row_count,
                 "column_count": expected_column_count,
                 "source_file": source_path.name,
@@ -332,7 +332,7 @@ def main():
         analysis_data = pd.DataFrame(analysis_records)
         audit_data = pd.DataFrame(audit_records)
 
-        analysis_data["environment_number"] = analysis_data["environment_id"].map(
+        analysis_data["environment_number"] = analysis_data["environment"].map(
             get_environment_number
         )
         analysis_data = analysis_data.sort_values("environment_number").drop(
@@ -347,7 +347,7 @@ def main():
 
         if len(analysis_data) != 40:
             raise ValueError("The analysis dataset must contain 40 environments")
-        if analysis_data["environment_id"].duplicated().any():
+        if analysis_data["environment"].duplicated().any():
             raise ValueError("The analysis dataset contains duplicate environments")
         if analysis_data["output_file"].duplicated().any():
             raise ValueError("The analysis dataset contains duplicate output files")
