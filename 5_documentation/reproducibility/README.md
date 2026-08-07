@@ -48,8 +48,8 @@ IoMT-Encryption-Simulation/
 ├── LICENSE
 ├── README.md
 └── requirements.txt
-
-Software Environment
+'''
+##Software Environment
 
 The original Version 2 timing measurements were produced using:
 
@@ -95,7 +95,7 @@ pip install -r requirements.txt
 
 The root-level requirements.txt contains the package versions required for the corrected Version 2 workflow.
 
-Source Data
+##Source Data
 
 The original synthetic source CSV files belong in:
 
@@ -114,7 +114,7 @@ ENV-26 to ENV-40	RSA-SHE	15
 
 The same synthetic source structure was used to support controlled comparison across the three conditions.
 
-Protected Transmission Fields
+##Protected Transmission Fields
 
 Nine data fields were treated as protected values:
 
@@ -134,7 +134,7 @@ Column headings were not treated as protected values.
 
 Row count and column order were retained.
 
-Unencrypted Condition
+##Unencrypted Condition
 
 ENV-01 through ENV-10 form the unencrypted baseline.
 
@@ -151,7 +151,7 @@ clear-text exposure = 100%
 
 The zero encryption-time value represents the absence of an encryption operation.
 
-Simulated ECC Condition
+##Simulated ECC Condition
 
 ENV-11 through ENV-25 form the simulated ECC condition.
 
@@ -174,7 +174,7 @@ The output is stored under:
 The expected clear-text exposure result is:
 
 0%
-RSA-SHE Condition
+##RSA-SHE Condition
 
 ENV-26 through ENV-40 form the RSA-SHE condition.
 
@@ -200,7 +200,7 @@ Reproduce the computational behavior of BFV, BGV, CKKS, or another production-gr
 The expected clear-text exposure result is:
 
 0%
-Encryption Timing Procedure
+##Encryption Timing Procedure
 
 Timing is performed only for the encrypted conditions.
 
@@ -232,7 +232,7 @@ For simulated ECC, new AES-GCM nonces are generated for every protected-value en
 
 No artificial latency, sleep() commands, or manually assigned timing values are used in Version 2.
 
-Clear-Text Exposure
+##Clear-Text Exposure
 
 Clear-text exposure is calculated across the nine protected transmission fields.
 
@@ -252,7 +252,7 @@ RSA-SHE	0%
 
 A value is counted as exposed only when the protected output value remains readable and unchanged from the corresponding original source value.
 
-Version 2 Metrics
+##Version 2 Metrics
 
 The analysis-ready dataset contains the following primary variables:
 
@@ -279,7 +279,7 @@ The dataset used for statistical analysis is retained under:
 3_output_data/analysis_ready/
 Validation Checks
 
-Before statistical analysis, confirm the following.
+##Before statistical analysis, confirm the following.
 
 Group Counts
 Unencrypted = 10
@@ -313,7 +313,7 @@ The median of the five runs is the analytical value.
 No artificial processing delays are present.
 Statistical Analysis
 
-IBM SPSS Statistics is used for the corrected Version 2 inferential analysis.
+##IBM SPSS Statistics is used for the corrected Version 2 inferential analysis.
 
 The final SPSS syntax is stored under:
 
@@ -395,7 +395,7 @@ ECC	1186.218687	0.000000	0.039449822
 RSA-SHE	12089.403372	0.000000	0.974129258
 Hypothesis Decisions
 
-The reproduced Version 2 analysis should support the following decisions.
+##The reproduced Version 2 analysis should support the following decisions.
 
 Research Question 1
 
@@ -423,7 +423,7 @@ Simulated encryption time
 
 RSA-SHE produces the larger values for all three measured performance outcomes.
 
-Interpretation Boundary
+##Interpretation Boundary
 
 Successful reproduction of these results demonstrates reproduction of the controlled Version 2 simulation and statistical analysis.
 
