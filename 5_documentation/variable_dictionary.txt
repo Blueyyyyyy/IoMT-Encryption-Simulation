@@ -163,7 +163,7 @@ encryption.
 
 
 Variable Name:
-clear_text_exposure_pct
+cleartext_exposure_pct
 
 Analysis Label:
 Clear-Text Exposure (%)
