@@ -29,24 +29,26 @@ IoMT-Encryption-Simulation/
 ├── 1_python_scripts/
 ├── 2_sample_data/
 │   ├── source_original/
-│   ├── unencrypted/
-│   ├── ecc/
-│   └── rsa_she/
 ├── 3_output_data/
+│   ├── analysis_ready
 │   ├── run_metrics/
 │   ├── validation_reports/
-│   └── analysis_ready/
 ├── 4_spss_outputs/
-│   ├── syntax/
+│   └── exported_report/
 │   ├── output/
-│   └── exported_reports/
+│   ├── syntax/
 ├── 5_documentation/
+│   ├── citations
+│   ├── license
+│   ├── repository_configuration
 │   ├── reproducibility/
+│   ├── requirements
 │   └── variable_dictionary.txt
+├── .gitignore
 ├── CITATION.cff
-├── citation.bib
 ├── LICENSE
 ├── README.md
+├── citation.bib
 └── requirements.txt
 ```
 
