@@ -83,7 +83,6 @@ cd IoMT-Encryption-Simulation
 Use the corrected Version 2 branch when reproducing the correction work:
 
 git checkout correction-v2
-Create a Python Environment
 
 ## Create a Python virtual environment:
 
