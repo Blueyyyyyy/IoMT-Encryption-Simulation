@@ -267,7 +267,8 @@ IoMT-Encryption-Simulation/
 ├── 3_output_data/
 ├── 4_spss_outputs/
 ├── 5_documentation/
-├── legacy/
+├── Legacy/
+│   └── Version1/
 ├── .gitignore
 ├── CITATION.cff
 ├── citation.bib
