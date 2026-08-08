@@ -22,7 +22,7 @@ Use the corrected Version 2 repository contents.
 
 Superseded Version 1 scripts, outputs, or statistical analyses should not be used to reproduce the final dissertation results.
 
-The final repository folder structure includes:
+The final repository ROOT and folder structure include:
 
 ```text
 IoMT-Encryption-Simulation/
