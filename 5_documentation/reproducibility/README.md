@@ -28,15 +28,15 @@ The final repository ROOT and folder structure include:
 IoMT-Encryption-Simulation/
 ├── 1_python_scripts/
 ├── 2_sample_data/
-│   ├── source_original/
+│   └── source_original/
 ├── 3_output_data/
 │   ├── analysis_ready/
 │   ├── run_metrics/
-│   ├── validation_reports/
+│   └── validation_reports/
 ├── 4_spss_outputs/
-│   └── exported_report/
+│   ├── exported_report/
 │   ├── output/
-│   ├── syntax/
+│   └── syntax/
 ├── 5_documentation/
 │   ├── citations/
 │   ├── license/
@@ -44,11 +44,13 @@ IoMT-Encryption-Simulation/
 │   ├── reproducibility/
 │   ├── requirements/
 │   └── variable_dictionary/
+├── Legacy/
+│   └── Version1/
 ├── .gitignore
 ├── CITATION.cff
+├── citation.bib
 ├── LICENSE
 ├── README.md
-├── citation.bib
 └── requirements.txt
 ```
 
