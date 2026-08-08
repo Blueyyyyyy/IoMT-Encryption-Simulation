@@ -1,6 +1,6 @@
 # IoMT Encryption Simulation
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21904513.svg)](https://doi.org/10.5281/zenodo.21904513)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16659485.svg)](https://doi.org/10.5281/zenodo.16659485)
 
 ## Correction Notice
 
