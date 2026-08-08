@@ -40,3 +40,8 @@ desktop.ini
 *.temp
 *.bak
 *~
+
+# Generated Version 2 condition datasets
+2_sample_data/unencrypted/
+2_sample_data/ecc/
+2_sample_data/rsa_she/
