@@ -1,0 +1,11 @@
+environment_id,source_file,output_file,row_count_valid,column_order_valid,missing_values,protected_values,unchanged_values,clear_text_exposure_percent,source_match_valid,status
+ENV-01,simulated_ENV-01.csv,unencrypted_ENV-01.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-02,simulated_ENV-02.csv,unencrypted_ENV-02.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-03,simulated_ENV-03.csv,unencrypted_ENV-03.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-04,simulated_ENV-04.csv,unencrypted_ENV-04.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-05,simulated_ENV-05.csv,unencrypted_ENV-05.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-06,simulated_ENV-06.csv,unencrypted_ENV-06.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-07,simulated_ENV-07.csv,unencrypted_ENV-07.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-08,simulated_ENV-08.csv,unencrypted_ENV-08.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-09,simulated_ENV-09.csv,unencrypted_ENV-09.csv,True,True,0,9000,9000,100.0,True,PASS
+ENV-10,simulated_ENV-10.csv,unencrypted_ENV-10.csv,True,True,0,9000,9000,100.0,True,PASS

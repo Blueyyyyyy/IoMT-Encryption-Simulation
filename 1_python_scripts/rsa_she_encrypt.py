@@ -7,24 +7,22 @@ from pathlib import Path
 
 import pandas as pd
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import ec
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives.asymmetric import padding, rsa
 
 
 # Project folders
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 SOURCE_DIR = PROJECT_ROOT / "2_sample_data" / "source_original"
-OUTPUT_DIR = PROJECT_ROOT / "2_sample_data" / "ecc"
+OUTPUT_DIR = PROJECT_ROOT / "2_sample_data" / "rsa_she"
 METRICS_DIR = PROJECT_ROOT / "3_output_data" / "run_metrics"
 VALIDATION_DIR = PROJECT_ROOT / "3_output_data" / "validation_reports"
 
 # Study settings
-ENVIRONMENT_START = 11
-ENVIRONMENT_END = 25
+ENVIRONMENT_START = 26
+ENVIRONMENT_END = 40
 TIMED_RUNS = 5
-NONCE_SIZE = 12
+RSA_KEY_SIZE = 2048
 
 PROTECTED_COLUMNS = [
     "org_id",
@@ -45,7 +43,7 @@ def get_environment_number(filename):
     return int(match.group(1)) if match else None
 
 
-# Find one source file for each ECC environment
+# Find one source file for each RSA-SHE environment
 def find_source_files():
     if not SOURCE_DIR.is_dir():
         raise FileNotFoundError(f"Source folder not found: {SOURCE_DIR}")
@@ -87,57 +85,43 @@ def load_source_file(file_path):
     return dataframe
 
 
-# Create the shared AES key
-def create_aes_key():
-    sender_private_key = ec.generate_private_key(ec.SECP384R1())
-    receiver_private_key = ec.generate_private_key(ec.SECP384R1())
-
-    sender_secret = sender_private_key.exchange(
-        ec.ECDH(),
-        receiver_private_key.public_key(),
-    )
-    receiver_secret = receiver_private_key.exchange(
-        ec.ECDH(),
-        sender_private_key.public_key(),
-    )
-
-    if sender_secret != receiver_secret:
-        raise ValueError("ECDH shared secrets did not match")
-
-    return HKDF(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=None,
-        info=b"iomt-ecc-simulation",
-    ).derive(sender_secret)
-
-
 # Encrypt one protected value
-def encrypt_value(aesgcm, value):
-    nonce = os.urandom(NONCE_SIZE)
-    ciphertext = aesgcm.encrypt(nonce, str(value).encode("utf-8"), None)
-    return base64.b64encode(nonce + ciphertext).decode("ascii")
+def encrypt_value(public_key, value):
+    plaintext = str(value).encode("utf-8")
+    max_length = RSA_KEY_SIZE // 8 - (2 * hashes.SHA256().digest_size) - 2
+
+    if len(plaintext) > max_length:
+        raise ValueError("A protected value is too long for RSA-OAEP with SHA-256")
+
+    ciphertext = public_key.encrypt(
+        plaintext,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None,
+        ),
+    )
+    return base64.b64encode(ciphertext).decode("ascii")
 
 
-# Generate new keys and encrypt all nine columns
+# Generate a new key pair and encrypt all nine columns
 def encrypt_dataframe(dataframe):
-    aes_key = create_aes_key()
-    aesgcm = AESGCM(aes_key)
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=RSA_KEY_SIZE,
+    )
+    public_key = private_key.public_key()
 
     encrypted_rows = []
     for row in dataframe.itertuples(index=False, name=None):
         encrypted_rows.append(
             {
-                column: encrypt_value(aesgcm, value)
+                column: encrypt_value(public_key, value)
                 for column, value in zip(PROTECTED_COLUMNS, row)
             }
         )
 
-    encrypted_dataframe = pd.DataFrame(
-        encrypted_rows,
-        columns=PROTECTED_COLUMNS,
-    )
-    return encrypted_dataframe, aes_key
+    return pd.DataFrame(encrypted_rows, columns=PROTECTED_COLUMNS)
 
 
 # Warm up once and time five runs
@@ -147,22 +131,20 @@ def run_timed_encryption(dataframe):
     timed_results = []
     for run_number in range(1, TIMED_RUNS + 1):
         start_time = time.perf_counter()
-        encrypted_dataframe, aes_key = encrypt_dataframe(dataframe)
+        encrypted_dataframe = encrypt_dataframe(dataframe)
         elapsed_time = time.perf_counter() - start_time
-        timed_results.append(
-            (run_number, elapsed_time, encrypted_dataframe, aes_key)
-        )
+        timed_results.append((run_number, elapsed_time, encrypted_dataframe))
 
     median_time = statistics.median(result[1] for result in timed_results)
     median_result = min(
         timed_results,
         key=lambda result: abs(result[1] - median_time),
     )
-    return timed_results, median_result[2], median_result[3], median_time
+    return timed_results, median_result[2], median_time
 
 
-# Check structure, decryption, and clear-text exposure
-def validate_output(source_dataframe, encrypted_dataframe, aes_key):
+# Check structure, ciphertext, and clear-text exposure
+def validate_output(source_dataframe, encrypted_dataframe):
     if list(encrypted_dataframe.columns) != PROTECTED_COLUMNS:
         raise ValueError("Encrypted columns do not match the source columns")
     if len(encrypted_dataframe) != len(source_dataframe):
@@ -173,20 +155,11 @@ def validate_output(source_dataframe, encrypted_dataframe, aes_key):
     source_values = source_dataframe.to_numpy(dtype=str)
     encrypted_values = encrypted_dataframe.to_numpy(dtype=str)
     unchanged_values = int((source_values == encrypted_values).sum())
-    aesgcm = AESGCM(aes_key)
 
-    for source_value, encrypted_value in zip(
-        source_values.ravel(),
-        encrypted_values.ravel(),
-    ):
-        payload = base64.b64decode(encrypted_value, validate=True)
-        if len(payload) <= NONCE_SIZE:
-            raise ValueError("Encrypted output contains an invalid AES-GCM payload")
-        nonce = payload[:NONCE_SIZE]
-        ciphertext = payload[NONCE_SIZE:]
-        plaintext = aesgcm.decrypt(nonce, ciphertext, None).decode("utf-8")
-        if plaintext != source_value:
-            raise ValueError("Decrypted value does not match the source value")
+    for value in encrypted_values.ravel():
+        decoded = base64.b64decode(value, validate=True)
+        if len(decoded) != RSA_KEY_SIZE // 8:
+            raise ValueError("Encrypted output contains invalid RSA ciphertext")
 
     total_values = int(source_values.size)
     exposure = (unchanged_values / total_values) * 100
@@ -202,7 +175,6 @@ def validate_output(source_dataframe, encrypted_dataframe, aes_key):
         "unchanged_values": unchanged_values,
         "clear_text_exposure_percent": exposure,
         "ciphertext_valid": True,
-        "decryption_check_valid": True,
     }
 
 
@@ -217,29 +189,25 @@ def write_csv(dataframe, output_path):
 # Process one environment
 def process_environment(environment_number, source_path):
     source_dataframe = load_source_file(source_path)
-    timed_results, encrypted_dataframe, aes_key, median_time = run_timed_encryption(
+    timed_results, encrypted_dataframe, median_time = run_timed_encryption(
         source_dataframe
     )
-    validation = validate_output(
-        source_dataframe,
-        encrypted_dataframe,
-        aes_key,
-    )
+    validation = validate_output(source_dataframe, encrypted_dataframe)
 
     environment_id = f"ENV-{environment_number:02d}"
-    output_filename = f"ecc_encrypted_{environment_id}.csv"
+    output_filename = f"rsa_she_encrypted_{environment_id}.csv"
     write_csv(encrypted_dataframe, OUTPUT_DIR / output_filename)
 
     metrics = {
         "environment_id": environment_id,
-        "encryption_code": 2,
-        "encryption_type": "ECC",
+        "encryption_code": 3,
+        "encryption_type": "RSA-SHE",
         "source_file": source_path.name,
         "output_file": output_filename,
         "row_count": len(source_dataframe),
         "column_count": len(source_dataframe.columns),
     }
-    for run_number, elapsed_time, _, _ in timed_results:
+    for run_number, elapsed_time, _ in timed_results:
         metrics[f"run_{run_number}_sec"] = round(elapsed_time, 9)
     metrics["simulated_encryption_time_sec"] = round(median_time, 9)
 
@@ -255,7 +223,7 @@ def process_environment(environment_number, source_path):
     return metrics, validation_record
 
 
-# Run all ECC environments
+# Run all RSA-SHE environments
 def main():
     try:
         source_files = find_source_files()
@@ -275,17 +243,17 @@ def main():
 
         write_csv(
             pd.DataFrame(metrics_records),
-            METRICS_DIR / "ecc_timing_results.csv",
+            METRICS_DIR / "rsa_she_timing_results.csv",
         )
         write_csv(
             pd.DataFrame(validation_records),
-            VALIDATION_DIR / "ecc_validation_report.csv",
+            VALIDATION_DIR / "rsa_she_validation_report.csv",
         )
 
         print(f"Completed {len(metrics_records)} environments")
         return 0
-    except Exception as error:
-        print(f"ECC encryption stopped: {error}")
+    except (FileNotFoundError, ValueError, OSError) as error:
+        print(f"RSA-SHE encryption stopped: {error}")
         return 1
 
 
