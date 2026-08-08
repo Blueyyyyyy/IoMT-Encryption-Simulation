@@ -2,7 +2,7 @@ cff-version: 1.2.0
 
 message: "If you use Version 2 of this dataset, code, or analysis in your research, please cite this repository."
 
-title: "IoMT Encryption Simulation Dataset and Python Scripts - Version 2"
+title: "IoMT Encryption Simulation: Version 2.0.0"
 
 authors:
   - family-names: "Anderson"
@@ -37,4 +37,4 @@ keywords:
   - Clear-Text Exposure
   - Reproducibility
 
-type: dataset
+type: software
