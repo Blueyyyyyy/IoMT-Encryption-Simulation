@@ -30,7 +30,7 @@ IoMT-Encryption-Simulation/
 ├── 2_sample_data/
 │   ├── source_original/
 ├── 3_output_data/
-│   ├── analysis_ready
+│   ├── analysis_ready/
 │   ├── run_metrics/
 │   ├── validation_reports/
 ├── 4_spss_outputs/
@@ -38,12 +38,12 @@ IoMT-Encryption-Simulation/
 │   ├── output/
 │   ├── syntax/
 ├── 5_documentation/
-│   ├── citations
-│   ├── license
-│   ├── repository_configuration
+│   ├── citations/
+│   ├── license/
+│   ├── repository_configuration/
 │   ├── reproducibility/
-│   ├── requirements
-│   └── variable_dictionary.txt
+│   ├── requirements/
+│   └── variable_dictionary/
 ├── .gitignore
 ├── CITATION.cff
 ├── LICENSE
