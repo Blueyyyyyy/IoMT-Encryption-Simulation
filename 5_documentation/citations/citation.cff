@@ -9,11 +9,11 @@ authors:
     given-names: "Devin"
     orcid: "https://orcid.org/0009-0004-6548-6862"
 
-version: "2.0"
+version: "2.0.0"
 
-doi: "10.5281/zenodo.16659484"
+doi: "10.5281/zenodo.21845613"
 
-date-released: 2026-08-07
+date-released: 2026-08-08
 
 url: "https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation"
 
