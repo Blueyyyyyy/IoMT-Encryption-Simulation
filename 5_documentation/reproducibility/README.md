@@ -80,9 +80,9 @@ Clone the repository and enter the project directory:
 git clone https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation.git
 cd IoMT-Encryption-Simulation
 
-Use the corrected Version 2 branch when reproducing the correction work:
+Use the published Version 2 repository from the main branch:
 
-git checkout correction-v2
+git checkout main
 
 ## Create a Python virtual environment:
 
