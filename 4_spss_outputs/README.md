@@ -6,7 +6,7 @@ This folder contains the Version 2 IBM SPSS Statistics files used for the final 
 
 This folder contains the human-readable exported version of the final SPSS results.
 
-### SPSS_analysis.pdf
+### SPSS_final_analysis.pdf
 
 PDF export of the final SPSS statistical output.
 
@@ -28,11 +28,11 @@ This PDF contains the final statistical results used in the dissertation.
 
 ## output
 
-This folder contains the working SPSS data and native output files.
+This folder contains the final SPSS data file and native output file.
 
-### iomt_encryption_analysis_ready.sav
+### iomt_encryption_final_data.sav
 
-SPSS data file containing the final 40-environment Version 2 analysis-ready dataset.
+SPSS data file containing the final 40-environment Version 2 dataset used for the statistical analysis.
 
 The dataset contains:
 
@@ -42,17 +42,17 @@ The dataset contains:
 
 The four primary analysis outcomes are file size, average row length, simulated encryption time, and clear-text exposure.
 
-### SPSS_analysis.spv
+### SPSS_final_analysis.spv
 
-Native IBM SPSS Statistics Viewer file containing the complete final analysis output, including descriptive statistics, assumption testing, robust omnibus tests, pairwise comparisons, diagnostic plots, and clear-text exposure results.
+Native IBM SPSS Statistics Viewer file containing the complete final statistical analysis output, including descriptive statistics, assumption testing, robust omnibus tests, pairwise comparisons, diagnostic plots, and clear-text exposure results.
 
 ## syntax
 
 This folder contains the SPSS syntax used to perform the final Version 2 statistical analysis.
 
-### SPSS_analysis.sps
+### SPSS_final_analysis.sps
 
-SPSS syntax file containing the commands used to analyze the final 40-environment dataset and generate the statistical output.
+SPSS syntax file containing the commands used to import the final 40-environment analysis-ready CSV, create the SPSS dataset, and generate the final statistical output.
 
 The syntax includes procedures for:
 
