@@ -2,12 +2,18 @@ cff-version: 1.2.0
 
 message: "If you use this dataset, code, or analysis in your research, please cite this repository."
 
-title: "IoMT Encryption Simulation"
+title: "IoMT Encryption Simulation: Version 2.0.0"
 
 authors:
   - family-names: "Anderson"
     given-names: "Devin"
     orcid: "https://orcid.org/0009-0004-6548-6862"
+
+version: "2.0.0"
+
+doi: "10.5281/zenodo.21845613"
+
+date-released: 2026-08-08
 
 url: "https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation"
 
