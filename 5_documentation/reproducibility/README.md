@@ -1,28 +1,34 @@
+The actual analysis-ready variables are environment_id, encryption_code, encryption_type, file_size_kb, average_row_length_bytes, simulated_encryption_time_sec, clear_text_exposure_percent, row_count, column_count, source_file, and output_file. The current variable dictionary itself is also stale, but we can correct that when we reach that file.
+
+Use this replacement:
+
 # Version 2 Reproducibility Instructions
 
 ## Purpose
 
-This document describes how to reproduce the corrected Version 2 analysis for the IoMT Encryption Simulation study.
+This document describes how to reproduce the final Version 2 analysis for the IoMT Encryption Simulation study.
 
-The study used 40 simulated always-operating Internet of Medical Things environments divided across three experimental conditions:
+The study used 40 simulated always-operating Internet of Medical Things (IoMT) environments divided across three experimental conditions:
 
 - Unencrypted: ENV-01 through ENV-10
 - Simulated ECC: ENV-11 through ENV-25
 - RSA-SHE: ENV-26 through ENV-40
 
-RSA-SHE refers to the RSA-based simulated homomorphic encryption condition used in the study.
+RSA-SHE refers to the RSA-based simulated homomorphic encryption condition evaluated in the study.
 
-RSA-SHE used RSA-OAEP with SHA-256. It did not perform computations on ciphertext and was not a fully or partially homomorphic encryption implementation.
+RSA-SHE used a controlled 2048-bit RSA-based hybrid simulated-homomorphic construction. It protected all nine transmission fields and performed the predefined encrypted MAP-numerator calculation `SBP + 2(DBP)` before validation decryption. Division by three to complete the MAP calculation occurred only after validation decryption.
 
-The study used synthetic data only. No real patient data, PHI, PII, physical medical devices, or live healthcare networks were used.
+RSA-SHE was a controlled simulated-homomorphic adaptation for this predefined operation. It was not a production-grade Fully Homomorphic Encryption implementation, was not an exact reproduction of MEHE, and did not support arbitrary ciphertext computation.
+
+The study used synthetic data only. No real patient data, Protected Health Information (PHI), Personally Identifiable Information (PII), physical medical devices, or live healthcare networks were used.
 
 ## Repository Version
 
-Use the corrected Version 2 repository contents.
+Use the final Version 2 repository contents from the `main` branch.
 
-Superseded Version 1 scripts, outputs, or statistical analyses should not be used to reproduce the final dissertation results.
+Superseded Version 1 scripts, outputs, and statistical analyses are retained under `Legacy/Version1/` for historical reference and should not be used to reproduce the final dissertation results.
 
-The final repository ROOT and folder structure include:
+The repository structure includes:
 
 ```text
 IoMT-Encryption-Simulation/
@@ -54,9 +60,9 @@ IoMT-Encryption-Simulation/
 └── requirements.txt
 ```
 
-## Software Environment
+Software Environment
 
-The original Version 2 timing measurements were produced using:
+The final Version 2 timing measurements were produced using:
 
 Microsoft Windows 11 Home, 64-bit
 Windows version 10.0.26200
@@ -71,20 +77,20 @@ Intel Core i9-9900K
 3.60 GHz base clock speed
 Approximately 16 GB physical memory
 
-Exact encryption timing values may differ on other hardware or software environments.
+The same computer and software environment were used for all timed runs.
 
-## Clone the Repository
+Exact encryption timing values may differ when the workflow is reproduced on different hardware or software environments.
+
+Clone the Repository
 
 Clone the repository and enter the project directory:
 
 git clone https://github.com/Blueyyyyyy/IoMT-Encryption-Simulation.git
 cd IoMT-Encryption-Simulation
-
-Use the published Version 2 repository from the main branch:
-
 git checkout main
+Create a Python Virtual Environment
 
-## Create a Python virtual environment:
+Create the environment:
 
 python -m venv .venv
 
@@ -92,158 +98,245 @@ Activate it on Windows:
 
 .venv\Scripts\activate
 
-Install the required Python packages:
+Install the required packages:
 
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-The root-level requirements.txt contains the package versions required for the corrected Version 2 workflow.
+The root-level requirements.txt contains:
 
-## Source Data
+pandas==2.3.0
+cryptography==45.0.4
+Source Data
 
-The original synthetic source CSV files belong in:
+The original synthetic source CSV files are stored in:
 
 2_sample_data/source_original/
 
-The complete study contains 40 simulated environments:
+The source files are named:
 
-ENV-01 through ENV-40
+simulated_ENV-01.csv
+through
+simulated_ENV-40.csv
 
 The condition assignments are fixed:
 
 Environment Range	Condition	n
-ENV-01 to ENV-10	Unencrypted	10
-ENV-11 to ENV-25	Simulated ECC	15
-ENV-26 to ENV-40	RSA-SHE	15
+ENV-01 through ENV-10	Unencrypted	10
+ENV-11 through ENV-25	Simulated ECC	15
+ENV-26 through ENV-40	RSA-SHE	15
 
-The same synthetic source structure was used to support controlled comparison across the three conditions.
+The original source files should not be modified when reproducing the study.
 
-## Protected Transmission Fields
+Protected Transmission Fields
 
-Nine data fields were treated as protected values:
+The source CSV files contain nine protected transmission fields:
 
-Organization identifier
-Device identifier
-Timestamp
-Heart rate
-Systolic blood pressure
-Diastolic blood pressure
-Oxygen saturation
-Temperature
-Battery level
+org_id
+device_id
+timestamp
+heart_rate
+bp_systolic
+bp_diastolic
+spo2
+temperature
+battery_level
 
-Under both encrypted conditions, all values within these nine fields were encrypted.
+All values under these nine fields are protected under the simulated ECC and RSA-SHE conditions.
 
-Column headings were not treated as protected values.
+Column headings are not treated as protected values. Row counts and column order are retained.
 
-Row count and column order were retained.
+Generated Condition Data
 
-## Unencrypted Condition
+The condition-specific transmission outputs are generated locally when the Python scripts are run.
+
+They are written to:
+
+2_sample_data/unencrypted/
+2_sample_data/ecc/
+2_sample_data/rsa_she/
+
+These generated folders are excluded from GitHub by .gitignore because of their combined file size. They are recreated during reproduction from the 40 source CSV files.
+
+The resulting measurement data and validation evidence are retained in 3_output_data/.
+
+Unencrypted Condition
 
 ENV-01 through ENV-10 form the unencrypted baseline.
 
-No encryption operation is performed.
+The script used is:
 
-The baseline output is stored under:
+1_python_scripts/unencrypted_baseline.py
 
-2_sample_data/unencrypted/
+No encryption operation is performed. The source data are copied without changing the protected values.
 
-The unencrypted condition has:
+The condition records:
 
-simulated encryption time = 0 seconds
-clear-text exposure = 100%
+simulated_encryption_time_sec = 0
+clear_text_exposure_percent = 100
 
-The zero encryption-time value represents the absence of an encryption operation.
+Five timing fields are also recorded as 0 seconds because no encryption operation occurs.
 
-## Simulated ECC Condition
+Generated outputs are written locally as:
+
+2_sample_data/unencrypted/unencrypted_ENV-01.csv
+through
+2_sample_data/unencrypted/unencrypted_ENV-10.csv
+Simulated ECC Condition
 
 ENV-11 through ENV-25 form the simulated ECC condition.
 
-The corrected Version 2 implementation uses:
+The script used is:
 
-Elliptic Curve Diffie-Hellman
+1_python_scripts/ecc_encrypt.py
+
+The final implementation uses:
+
+Elliptic Curve Diffie-Hellman (ECDH)
 SECP384R1
-HKDF with SHA-256
-256-bit derived symmetric key
+HKDF-SHA256
+256-bit derived AES key
 AES-256-GCM
-New nonce for every protected-value encryption operation
+Fresh 12-byte nonce for every protected-value encryption operation
 Base64-encoded encrypted output
 
-ECC is used for key agreement and key derivation. AES-256-GCM encrypts the protected values.
+ECDH establishes shared key material, HKDF-SHA256 derives the AES key, and AES-256-GCM encrypts all nine protected fields.
 
-The output is stored under:
+One untimed warm-up run is completed before five timed runs. The median of the five measured runs is retained as simulated_encryption_time_sec.
 
-2_sample_data/ecc/
+Post-timing validation decrypts every encrypted protected value and confirms that it matches the original source value.
 
-The expected clear-text exposure result is:
+The expected clear-text exposure is:
 
-0%
-## RSA-SHE Condition
+clear_text_exposure_percent = 0
+
+Generated outputs are written locally as:
+
+2_sample_data/ecc/ecc_encrypted_ENV-11.csv
+through
+2_sample_data/ecc/ecc_encrypted_ENV-25.csv
+RSA-SHE Condition
 
 ENV-26 through ENV-40 form the RSA-SHE condition.
 
-The corrected Version 2 implementation uses:
+The script used is:
 
-RSA
-OAEP padding
-SHA-256
-Encryption of all nine protected transmission fields
-Base64-encoded encrypted output
+1_python_scripts/rsa_she_encrypt.py
 
-The output is stored under:
+The final implementation uses:
 
-2_sample_data/rsa_she/
+2048-bit RSA
+RSA public exponent 65537
+A new RSA key pair for each run
+A run-specific exponent-encoding base for bp_systolic and bp_diastolic
+Reversible integer encoding for the remaining protected fields
+RSA modular encryption of all nine protected fields
+A fresh randomized hybrid layer for every protected value
+Fixed-width Base64 serialization of RSA-sized ciphertext
+A predefined encrypted MAP-numerator calculation
 
-RSA-SHE does not:
+The randomized hybrid construction follows the controlled relationship:
 
-Perform computation on ciphertext
-Implement fully homomorphic encryption
-Implement partially homomorphic encryption
-Reproduce the computational behavior of BFV, BGV, CKKS, or another production-grade FHE scheme
+H = RSA(encoded) * RSA(r) mod n
 
-The expected clear-text exposure result is:
+where r is a fresh random invertible mask.
 
-0%
-## Encryption Timing Procedure
+The predefined encrypted healthcare calculation is:
 
-Timing is performed only for the encrypted conditions.
+SBP + 2(DBP)
 
-Python's:
+The systolic and diastolic operands remain encrypted during this operation.
 
-time.perf_counter()
+Division by three to complete the MAP calculation is performed only after validation decryption and is not part of the encrypted-domain operation.
 
-is used to measure actual elapsed processing time.
+One untimed warm-up run is completed before five timed runs. The median of those five measured runs is retained as simulated_encryption_time_sec.
 
-For each encrypted environment:
+RSA-SHE is not:
 
-Load the source file before timing begins.
+Production-grade FHE
+An exact reproduction of Kamatchi and Kumari's MEHE implementation
+A general-purpose homomorphic encryption scheme
+A scheme supporting arbitrary ciphertext computation
+
+Generated outputs are written locally as:
+
+2_sample_data/rsa_she/rsa_she_encrypted_ENV-26.csv
+through
+2_sample_data/rsa_she/rsa_she_encrypted_ENV-40.csv
+
+The expected clear-text exposure is:
+
+clear_text_exposure_percent = 0
+Encryption Timing Procedure
+
+Python's time.perf_counter() is used to measure actual elapsed processing time.
+
+For both encrypted conditions:
+
+Load and structurally validate the source CSV before timing begins.
 Perform one untimed warm-up run.
 Perform five timed runs.
-Begin timing immediately before condition-specific key generation and encryption.
-Generate new cryptographic keys for each timed run.
-Encrypt the complete set of protected values.
-End timing after the complete encrypted data structure has been produced.
-Record the five elapsed times.
-Retain the median elapsed time as the analytical encryption-time value.
+Generate fresh run-specific cryptographic material.
+Retain the median of the five timed runs as simulated_encryption_time_sec.
+Perform correctness and exposure validation after the measured cryptographic workflow.
 
-Source-file loading is excluded from the timed interval.
+For simulated ECC, the measured workflow includes key generation, ECDH shared-secret establishment, HKDF key derivation, encryption of all nine protected fields, and creation of the encrypted in-memory output structure.
 
-Output-file writing is excluded from the timed interval.
+For RSA-SHE, timing begins immediately before run-specific RSA key generation and includes:
 
-Cryptographic key generation is included in the timed interval.
+RSA key generation
+Homomorphic setup and run-specific exponent-base generation
+Encoding and RSA modular encryption of all nine protected fields
+Randomized hybrid ciphertext construction
+Encrypted MAP-numerator evaluation
+Construction of the encrypted in-memory transmission structure
 
-For simulated ECC, new AES-GCM nonces are generated for every protected-value encryption operation.
+The RSA-SHE timer stops before:
 
-No artificial latency, sleep() commands, or manually assigned timing values are used in Version 2.
+Correctness-validation decryption or unmasking
+MAP-result verification
+Clear-text-exposure checks
+Validation and audit-report generation
+Disk writing
+File-size measurement
+Average-row-length measurement
 
-## Clear-Text Exposure
+A new RSA key pair, homomorphic base, and fresh random masks are generated for every RSA-SHE run.
 
-Clear-text exposure is calculated across the nine protected transmission fields.
+Fresh cryptographic material and a new AES-GCM nonce for every protected-value encryption operation are generated during simulated ECC runs.
 
-The calculation is:
+No artificial latency, sleep() commands, or manually assigned encryption-time values are used.
+
+The unencrypted condition is recorded as 0 seconds because no encryption operation is performed.
+
+RSA-SHE Diagnostic Timing
+
+The file:
+
+3_output_data/run_metrics/rsa_she_timing_results.csv
+
+also preserves diagnostic timing information for the median RSA-SHE run.
+
+The diagnostic variables are:
+
+median_run_number
+median_rsa_keygen_time_sec
+median_homomorphic_setup_time_sec
+median_rsa_stage_time_sec
+median_homomorphic_layer_time_sec
+median_evaluation_time_sec
+median_structure_time_sec
+
+These values support reproducibility and validation. They are not additional primary SPSS dependent variables.
+
+Clear-Text Exposure
+
+Clear-text exposure is calculated across all data cells under the nine protected transmission fields.
+
+The metric compares each generated protected value with the corresponding source value:
 
 clear-text exposure (%) =
-(readable and unchanged protected values / total protected values) × 100
+(unchanged protected values / total protected values) × 100
 
 Column headings are excluded.
 
@@ -253,100 +346,157 @@ Condition	Expected Clear-Text Exposure
 Unencrypted	100%
 Simulated ECC	0%
 RSA-SHE	0%
+Recommended Python Run Order
 
-A value is counted as exposed only when the protected output value remains readable and unchanged from the corresponding original source value.
+Run the scripts from the repository root in this order:
 
-## Version 2 Metrics
+python 1_python_scripts/unencrypted_baseline.py
+python 1_python_scripts/ecc_encrypt.py
+python 1_python_scripts/rsa_she_encrypt.py
+python 1_python_scripts/collect_metrics.py
 
-The analysis-ready dataset contains the following primary variables:
+The first three scripts create the condition-specific transmission outputs, timing records, and validation reports.
 
-environment
+collect_metrics.py must be run last because it validates the complete experimental output and creates the final analysis-ready dataset.
+
+Analysis-Ready Dataset
+
+The final dataset is:
+
+3_output_data/analysis_ready/iomt_encryption_analysis_ready.csv
+
+It contains the following exact variable names:
+
+environment_id
+encryption_code
 encryption_type
 file_size_kb
-avg_row_length_bytes
+average_row_length_bytes
 simulated_encryption_time_sec
-cleartext_exposure_pct
+clear_text_exposure_percent
+row_count
+column_count
+source_file
+output_file
 
-See:
+The four primary measured outcomes are:
 
-5_documentation/variable_dictionary.txt
+file_size_kb
+average_row_length_bytes
+simulated_encryption_time_sec
+clear_text_exposure_percent
 
-for complete definitions.
+The remaining fields identify the environment, experimental condition, source and output files, and transmission structure.
 
-Condition-level timing and validation information is retained under:
+Complete variable definitions are documented in:
 
-3_output_data/run_metrics/
-3_output_data/validation_reports/
+5_documentation/variable_dictionary/variable_dictionary.txt
+Timing and Validation Files
 
-The dataset used for statistical analysis is retained under:
+Condition-specific timing files are stored in:
 
-3_output_data/analysis_ready/
-## Validation Checks
+3_output_data/run_metrics/unencrypted_timing_results.csv
+3_output_data/run_metrics/ecc_timing_results.csv
+3_output_data/run_metrics/rsa_she_timing_results.csv
 
-Before statistical analysis, confirm the following.
+Validation reports are stored in:
 
-Group Counts
-Unencrypted = 10
-ECC = 15
-RSA-SHE = 15
-Total = 40
-## Encryption Completeness
+3_output_data/validation_reports/unencrypted_validation_report.csv
+3_output_data/validation_reports/ecc_validation_report.csv
+3_output_data/validation_reports/rsa_she_validation_report.csv
+3_output_data/validation_reports/combined_metrics_validation_report.csv
+Validation Checks
+Unencrypted
 
-For both encrypted conditions:
+The validation process confirms:
 
-All nine protected fields are encrypted.
-No protected value remains readable and unchanged.
-Row counts remain unchanged.
-Column order remains unchanged.
-Encryption errors are not silently substituted into the dataset.
-## Clear-Text Exposure
+Row count and column order are preserved
+No values are missing
+Every protected value matches the original source value
+Clear-text exposure equals 100%
+Simulated ECC
 
-Expected values are:
+The validation process confirms:
 
-Unencrypted = 100%
-ECC = 0%
-RSA-SHE = 0%
-## Timing
+Row count and column order are preserved
+No values are missing
+All nine protected fields contain encrypted values
+Every encrypted protected value successfully decrypts to its original source value
+Clear-text exposure equals 0%
+RSA-SHE
 
-For each encrypted environment:
+Post-timing RSA-SHE validation confirms:
 
-One warm-up run is not retained.
-Five timed runs are recorded.
-All retained timed-run values are actual measured elapsed times.
-The median of the five runs is the analytical value.
-No artificial processing delays are present.
-## Statistical Analysis
+Row count and column order are preserved
+No values are missing
+All nine protected fields contain serialized RSA-sized ciphertext
+Every hybrid ciphertext matches the expected public-key construction
+A deterministic sample of up to 12 rows is decrypted and unmasked across all nine protected fields
+The encrypted MAP-numerator operation is validated for every source row
+The encrypted operation is exactly SBP + 2(DBP)
+Division by three occurs only after validation decryption
+The run-specific exponent base remains valid over the required MAP range
+Arithmetic bounds remain valid
+RSA key size equals 2048 bits
+RSA public exponent equals 65537
+Clear-text exposure equals 0%
 
-IBM SPSS Statistics is used for the corrected Version 2 inferential analysis.
+A failed required validation causes processing to stop rather than silently accept an invalid environment.
 
-The final SPSS syntax is stored under:
+Combined Metrics Validation
 
-4_spss_outputs/syntax/
+collect_metrics.py independently confirms:
 
-Use the final Version 2 analysis-ready dataset from:
+Expected 10/15/15 group assignments
+Source and generated output availability
+Row and column structure
+Five timing runs
+Correct five-run median
+File-size measurements
+Average-row-length measurements
+Clear-text exposure
+RSA-SHE diagnostic timing and validation information
+Final total of 40 analysis-ready environments
+SPSS Statistical Analysis
 
-3_output_data/analysis_ready/
+The final SPSS syntax file is:
 
-The corrected procedures are:
+4_spss_outputs/syntax/SPSS_final_analysis.sps
 
-## File Size
+The final SPSS data file is:
+
+4_spss_outputs/output/iomt_encryption_final_data.sav
+
+The final native SPSS output is:
+
+4_spss_outputs/output/SPSS_final_analysis.spv
+
+The exported final report is:
+
+4_spss_outputs/exported_report/SPSS_final_analysis.pdf
+
+The SPSS syntax currently contains the original local Windows paths used during the final analysis. When reproducing the statistical analysis on another computer, update the file paths in SPSS_final_analysis.sps to point to the corresponding locations within the local repository clone before running the syntax.
+
+The statistical procedures are described below.
+
+File Size
 
 Use:
 
 Welch's one-way ANOVA
-Games-Howell pairwise comparisons
+Games–Howell pairwise comparisons
 
 Expected omnibus result:
 
 F(2, 18.667) = 79.262, p < .001
 
-All three file-size pairwise comparisons should be statistically significant.
+All three file-size pairwise comparisons are statistically significant.
 
-## Average Row Length
+Average Row Length
 
 Use:
 
-Independent-samples Kruskal-Wallis test
+Independent-samples Kruskal–Wallis test
 Bonferroni-adjusted pairwise comparisons
 
 Expected omnibus result:
@@ -358,11 +508,11 @@ Expected adjusted pairwise results:
 Unencrypted vs ECC:      p = .017
 Unencrypted vs RSA-SHE:  p < .001
 ECC vs RSA-SHE:          p = .001
-## Simulated Encryption Time
+Simulated Encryption Time
 
 Use:
 
-Independent-samples Kruskal-Wallis test
+Independent-samples Kruskal–Wallis test
 Bonferroni-adjusted pairwise comparisons
 
 Expected omnibus result:
@@ -374,73 +524,68 @@ Expected adjusted pairwise results:
 Unencrypted vs ECC:      p = .025
 Unencrypted vs RSA-SHE:  p < .001
 ECC vs RSA-SHE:          p = .001
-## Clear-Text Exposure
+Clear-Text Exposure
 
 Evaluate clear-text exposure descriptively.
 
-Do not conduct an inferential ECC-versus-RSA-SHE test because both encrypted conditions contain:
+No inferential ECC-versus-RSA-SHE comparison is conducted because both encrypted conditions contain:
 
-0% exposure
-0 within-group variance
-## Expected Descriptive Results
+0% clear-text exposure
+0 within-group variation
+Expected Descriptive Results
 
-The corrected Version 2 results are:
+The final Version 2 descriptive results are:
 
 Condition	n	File Size Mean KB	Average Row Length Mean Bytes	Encryption Time Mean Seconds	Clear-Text Exposure
 Unencrypted	10	61.64150	61.02590	0.00000000	100%
-ECC	15	1825.35319	428.00000	0.06399869	0%
-RSA-SHE	15	35791.88965	3104.00000	2.92742547	0%
+ECC	15	1825.35319	428.00000	0.06475018	0%
+RSA-SHE	15	35791.88965	3104.00000	32.24001641	0%
 
 Standard deviations for the three performance measures are:
 
 Condition	File Size SD	Average Row Length SD	Encryption Time SD
 Unencrypted	0.005922	0.006064	0.000000000
-ECC	1186.218687	0.000000	0.039449822
-RSA-SHE	12089.403372	0.000000	0.974129258
-## Hypothesis Decisions
-
-The reproduced Version 2 analysis should support the following decisions.
-
-## Research Question 1
+ECC	1186.218687	0.000000	0.039775335
+RSA-SHE	12089.403372	0.000000	11.560739492
+Hypothesis Decisions
+Research Question 1
 
 Reject the null hypothesis.
 
-RSA-SHE differs significantly from the unencrypted condition in the operationalized network-traffic measures of file size and average row length.
+RSA-SHE differed significantly from the unencrypted condition in the operationalized network-traffic measures of file size and average row length.
 
-## Research Question 2
+Research Question 2
 
 Do not reject the null hypothesis.
 
-Both simulated ECC and RSA-SHE produce 0% clear-text exposure.
+Both simulated ECC and RSA-SHE produced 0% clear-text exposure. RSA-SHE was not shown to improve the measured confidentiality outcome beyond simulated ECC.
 
-RSA-SHE is not shown to improve the measured confidentiality outcome beyond simulated ECC.
+Research Question 3
 
-## Research Question 3
+Reject the null hypothesis for the three operationalized performance measures.
 
-Reject the null hypothesis for all three operationalized performance measures.
-
-RSA-SHE differs significantly from simulated ECC in:
+RSA-SHE differed significantly from simulated ECC in:
 
 File size
 Average row length
 Simulated encryption time
 
-RSA-SHE produces the larger values for all three measured performance outcomes.
+RSA-SHE produced the larger values for all three measured performance outcomes.
 
-## Interpretation Boundary
+Interpretation Boundary
 
-Successful reproduction of these results demonstrates reproduction of the controlled Version 2 simulation and statistical analysis.
+Successful reproduction of these results demonstrates reproduction of the controlled Version 2 simulation, RSA-SHE predefined encrypted MAP-numerator workload, and statistical analysis.
 
 It does not establish:
 
 Production-grade FHE performance
-Homomorphic computation performance
-Post-quantum security
-Quantum resistance
+General-purpose or arbitrary homomorphic computation capability
+Real-world IoMT device execution times
+Physical-device power or battery consumption
+Post-quantum security or quantum resistance
 Protection against malware
 Protection against denial-of-service attacks
 Protection against compromised endpoints
-Physical IoMT device performance
 Real-world healthcare deployment performance
 
-The findings apply to the tested implementations and controlled simulated environment.
+The findings apply to the tested implementations, documented test computer, and controlled simulated environment.
