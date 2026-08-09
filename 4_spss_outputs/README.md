@@ -4,7 +4,7 @@ This folder contains the Version 2 IBM SPSS Statistics files used for the final 
 
 ## exported_report
 
-This folder contains the human-readable exported version of the final SPSS results.
+This folder contains the PDF exported version of the final SPSS results.
 
 ### SPSS_final_analysis.pdf
 
