@@ -633,4 +633,3 @@ citation.bib
 5_documentation/citations/citation.bib
 ```
 
-The citation metadata will be finalized with the updated archival DOI after the final repository version is deposited in Zenodo.
