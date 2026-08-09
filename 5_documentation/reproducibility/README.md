@@ -1,7 +1,3 @@
-The actual analysis-ready variables are environment_id, encryption_code, encryption_type, file_size_kb, average_row_length_bytes, simulated_encryption_time_sec, clear_text_exposure_percent, row_count, column_count, source_file, and output_file. The current variable dictionary itself is also stale, but we can correct that when we reach that file.
-
-Use this replacement:
-
 # Version 2 Reproducibility Instructions
 
 ## Purpose
