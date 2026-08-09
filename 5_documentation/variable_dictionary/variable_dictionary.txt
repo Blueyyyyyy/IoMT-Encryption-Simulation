@@ -1,23 +1,31 @@
 IoMT Encryption Simulation
 Version 2 Variable Dictionary
 
-This variable dictionary describes the analytical variables used in the corrected Version 2
-dataset for the IoMT encryption simulation study.
+This variable dictionary describes the analytical variables contained in the final Version 2
+dataset for the IoMT Encryption Simulation study.
 
-The study included 40 simulated always-operating IoMT environments distributed across
-three experimental conditions:
+The study included 40 simulated always-operating Internet of Medical Things (IoMT)
+environments distributed across three experimental conditions:
 
 Unencrypted: 10 environments
 ECC:         15 environments
 RSA-SHE:     15 environments
 
-RSA-SHE refers to the RSA-based simulated homomorphic encryption condition used in
-this study. The condition used RSA-OAEP with SHA-256. It did not perform computations
-on ciphertext and was not an implementation of fully or partially homomorphic encryption.
+RSA-SHE refers to the RSA-based simulated homomorphic encryption condition used in this
+study. The final implementation used a controlled 2048-bit RSA-based hybrid construction
+that protected all nine transmission fields and performed the predefined encrypted
+MAP-numerator calculation, SBP + 2(DBP), before validation decryption.
+
+Division by three to complete the MAP calculation was performed only after validation
+decryption.
+
+RSA-SHE was a controlled simulated-homomorphic adaptation for this predefined operation.
+It was not a production-grade Fully Homomorphic Encryption implementation, was not an
+exact reproduction of MEHE, and did not support arbitrary ciphertext computation.
 
 
 Variable Name:
-environment
+environment_id
 
 Description:
 Identifier assigned to each simulated IoMT test environment.
@@ -29,16 +37,42 @@ Measurement Level:
 Identifier / nominal
 
 Notes:
-Each environment represents one simulated organizational IoMT test configuration.
+Each environment represents one simulated IoMT test configuration.
+
 The environments were created synthetically and were not sampled from actual healthcare
-organizations.
+organizations, physical medical devices, or live healthcare networks.
+
+
+Variable Name:
+encryption_code
+
+Description:
+Numeric code identifying the experimental encryption condition assigned to each simulated
+IoMT environment.
+
+Expected Values:
+1 = Unencrypted
+2 = ECC
+3 = RSA-SHE
+
+Measurement Level:
+Categorical / nominal
+
+Group Sizes:
+1 = Unencrypted = 10
+2 = ECC         = 15
+3 = RSA-SHE     = 15
+
+Notes:
+The numeric code is used to support condition grouping and statistical analysis.
 
 
 Variable Name:
 encryption_type
 
 Description:
-Experimental encryption condition assigned to the simulated IoMT environment.
+Text label identifying the experimental encryption condition assigned to the simulated IoMT
+environment.
 
 Expected Values:
 Unencrypted
@@ -50,19 +84,20 @@ Categorical / nominal
 
 Group Sizes:
 Unencrypted = 10
-ECC = 15
-RSA-SHE = 15
+ECC         = 15
+RSA-SHE     = 15
 
 Notes:
 Unencrypted represents the baseline condition with no encryption operation.
 
 ECC refers to the simulated ECC condition. The implementation used Elliptic Curve
-Diffie-Hellman (ECDH) with the SECP384R1 curve, HKDF with SHA-256, and AES-256-GCM
-to encrypt protected values. A new nonce was generated for each protected value.
+Diffie-Hellman (ECDH) with SECP384R1, HKDF-SHA256, and AES-256-GCM. A fresh
+12-byte AES-GCM nonce was generated for every protected-value encryption operation.
 
-RSA-SHE refers to the RSA-based simulated homomorphic encryption condition. RSA-OAEP
-with SHA-256 was applied to protected values. RSA-SHE did not perform homomorphic
-computation and should not be interpreted as production-grade FHE or PHE.
+RSA-SHE refers to the RSA-based simulated homomorphic encryption condition. The final
+implementation used 2048-bit RSA with public exponent 65537, run-specific encoding,
+RSA modular encryption of all nine protected fields, a randomized hybrid layer, and the
+predefined encrypted MAP-numerator calculation SBP + 2(DBP).
 
 
 Variable Name:
@@ -71,8 +106,11 @@ file_size_kb
 Analysis Label:
 File Size (KB)
 
+SPSS Label:
+Output file size in kilobytes
+
 Description:
-Total size of the generated simulated transmission output file, measured in kilobytes.
+Total size of the generated condition-specific transmission output file, measured in kilobytes.
 
 Measurement Level:
 Continuous / ratio
@@ -81,22 +119,28 @@ Unit:
 Kilobytes (KB)
 
 Interpretation:
-File size was used as an indicator of ciphertext expansion and transmission/storage demand.
+File size was used as an indicator of encrypted data expansion and transmission or storage
+demand.
+
 Larger values represent larger generated transmission outputs.
 
 Notes:
-The variable reflects the output produced by the tested implementation and should not be
+The variable reflects the outputs produced by the tested implementations and should not be
 interpreted as a universal file-size requirement for ECC, RSA, or production-grade FHE.
 
 
 Variable Name:
-avg_row_length_bytes
+average_row_length_bytes
 
 Analysis Label:
-Avg. Row Length (Bytes)
+Average Row Length (Bytes)
+
+SPSS Label:
+Average row length in bytes
 
 Description:
-Average number of bytes contained in each simulated transmission row or record.
+Average number of bytes contained in each data row of the generated condition-specific
+transmission output.
 
 Measurement Level:
 Continuous / ratio
@@ -105,8 +149,8 @@ Unit:
 Bytes
 
 Interpretation:
-Average row length was used as an indicator of simulated message payload size and encrypted
-transmission-record growth.
+Average row length was used as an indicator of transmission-record growth and data
+expansion under each experimental condition.
 
 Notes:
 Larger values indicate greater data expansion within the generated transmission records.
@@ -118,9 +162,12 @@ simulated_encryption_time_sec
 Analysis Label:
 Simulated Encryption Time (s)
 
+SPSS Label:
+Measured encryption time in seconds
+
 Description:
-Actual elapsed processing time required to complete the condition-specific encryption process
-within the Python-based simulation.
+Actual elapsed processing time, in seconds, required to complete the timed condition-specific
+cryptographic workflow within the Python-based simulated environment.
 
 Measurement Level:
 Continuous / ratio
@@ -132,45 +179,69 @@ Timing Method:
 Python time.perf_counter()
 
 Procedure:
-One untimed warm-up run was completed for each simulated encrypted environment.
-Five timed runs were then completed.
+One untimed warm-up run was completed before five timed runs.
+
 The median of the five timed runs was retained as the analytical value.
 
-Timing began immediately before condition-specific cryptographic key generation and
-encryption and ended after the complete encrypted data structure was produced.
+Source CSV loading and structural validation occurred before timing began.
 
-Cryptographic key generation was included within the timed interval.
+For the simulated ECC condition, the timed workflow included generation of the
+condition-specific cryptographic material and encryption of all nine protected fields.
 
-Source-file loading and output-file writing were excluded from the timed interval.
+For RSA-SHE, the timed workflow included:
 
-New cryptographic keys were generated for each timed run.
+- RSA key generation
+- Run-specific homomorphic setup
+- Encoding and RSA modular encryption of all nine protected fields
+- Randomized hybrid ciphertext construction
+- Predefined encrypted MAP-numerator evaluation
+- Construction of the encrypted in-memory transmission structure
 
-For the simulated ECC condition, a new AES-GCM nonce was generated for every protected
-value encryption operation.
+For RSA-SHE, the timer stopped before:
 
-No artificial processing delays, sleep() commands, or artificial latency values were used
-to produce the Version 2 timing results.
+- Correctness-validation decryption and unmasking
+- MAP-result verification
+- Clear-text-exposure checks
+- Validation or audit-report generation
+- Disk writing
+- File-size measurement
+- Average-row-length measurement
+
+New run-specific cryptographic material was generated for each timed run.
+
+For simulated ECC, a fresh AES-GCM nonce was generated for every protected-value
+encryption operation.
+
+No artificial processing delays, sleep() commands, or manually assigned timing values were
+used to produce the Version 2 results.
 
 The unencrypted condition was recorded as 0 seconds because no encryption operation was
 performed.
 
 Interpretation:
-This variable represents implementation-specific computational processing time on the
+This variable represents implementation-specific measured computational overhead on the
 documented study computer.
 
-It should not be interpreted as the execution time of production-grade fully homomorphic
-encryption.
+Although the repository variable name uses the term simulated_encryption_time_sec, the
+recorded values are actual elapsed processing times measured with time.perf_counter() within
+the simulated experimental environment.
+
+The values should not be interpreted as execution-time benchmarks for production-grade
+FHE systems or physical IoMT devices.
 
 
 Variable Name:
-cleartext_exposure_pct
+clear_text_exposure_percent
 
 Analysis Label:
 Clear-Text Exposure (%)
 
+SPSS Label:
+Clear-text exposure percentage
+
 Description:
-Percentage of protected data values that remained readable and unchanged in the generated
-transmission output when compared with the original source data.
+Percentage of protected output values that remained unchanged from the corresponding
+original source values.
 
 Measurement Level:
 Continuous / ratio
@@ -178,28 +249,31 @@ Continuous / ratio
 Unit:
 Percent
 
-Protected Values:
+Protected Fields:
 All data cells under the following nine transmission fields were included:
 
-1. Organization identifier
-2. Device identifier
-3. Timestamp
-4. Heart rate
-5. Systolic blood pressure
-6. Diastolic blood pressure
-7. Oxygen saturation
-8. Temperature
-9. Battery level
+1. org_id
+2. device_id
+3. timestamp
+4. heart_rate
+5. bp_systolic
+6. bp_diastolic
+7. spo2
+8. temperature
+9. battery_level
 
 Column headings were excluded from the calculation.
 
 Calculation:
 Clear-text exposure (%) =
-(readable and unchanged protected values / total protected values) x 100
+(unchanged protected values / total protected values) x 100
 
 Interpretation:
-100% indicates that all protected values remained readable and unchanged.
-0% indicates that no protected values remained readable and unchanged.
+100% indicates that all protected output values remained unchanged from the original
+source values.
+
+0% indicates that no protected output values remained unchanged from the corresponding
+source values.
 
 Version 2 Results:
 Unencrypted = 100%
@@ -209,15 +283,133 @@ RSA-SHE     = 0%
 Notes:
 Both encrypted conditions produced 0% clear-text exposure.
 
-Because ECC and RSA-SHE produced the same measured clear-text exposure result, the study
-did not demonstrate an additional confidentiality advantage for RSA-SHE over simulated ECC
-on this measure.
+Because simulated ECC and RSA-SHE produced the same measured clear-text exposure
+result, the study did not demonstrate an additional confidentiality advantage for RSA-SHE
+over simulated ECC on this measured outcome.
+
+
+Variable Name:
+row_count
+
+SPSS Label:
+Number of data rows
+
+Description:
+Number of data rows contained in the source and generated transmission file for the simulated
+environment.
+
+Measurement Level:
+Continuous / ratio
+
+Unit:
+Rows
+
+Notes:
+The row count varies by simulated environment.
+
+Validation confirms that the generated condition-specific output retains the expected source
+row count.
+
+
+Variable Name:
+column_count
+
+SPSS Label:
+Number of protected columns
+
+Description:
+Number of protected transmission columns contained in the simulated environment.
+
+Expected Value:
+9
+
+Measurement Level:
+Continuous / ratio
+
+Unit:
+Columns
+
+Notes:
+All study environments contain the same nine protected transmission fields.
+
+The value is retained as a structural validation measure.
+
+
+Variable Name:
+source_file
+
+Description:
+Filename of the original synthetic source CSV associated with the simulated environment.
+
+Expected Format:
+simulated_ENV-XX.csv
+
+Measurement Level:
+Identifier / nominal
+
+Notes:
+The source file contains the predefined synthetic clear-text input used by the appropriate
+condition-specific Python workflow.
+
+The original source files are retained under:
+
+2_sample_data/source_original/
+
+
+Variable Name:
+output_file
+
+Description:
+Filename assigned to the condition-specific transmission output generated for the simulated
+environment.
+
+Expected Formats:
+
+Unencrypted:
+unencrypted_ENV-XX.csv
+
+ECC:
+ecc_encrypted_ENV-XX.csv
+
+RSA-SHE:
+rsa_she_encrypted_ENV-XX.csv
+
+Measurement Level:
+Identifier / nominal
+
+Notes:
+The condition-specific transmission files are generated locally during reproduction.
+
+Because of their combined file size, the generated output folders are excluded from GitHub.
+The resulting measurements and validation evidence are retained in 3_output_data.
+
+
+Version 2 Primary Study Outcomes
+
+The four primary measured outcomes used in the statistical analysis are:
+
+file_size_kb
+average_row_length_bytes
+simulated_encryption_time_sec
+clear_text_exposure_percent
+
+The remaining variables support environment identification, experimental-condition coding,
+file traceability, and structural validation.
 
 
 Version 2 Scope Note
 
 The variables in this dictionary describe outcomes from a controlled simulation using
 synthetic data.
+
+The study directly evaluated:
+
+- File size
+- Average row length
+- Measured encryption time
+- Clear-text exposure
+- The predefined encrypted RSA-SHE MAP-numerator calculation as an implementation and
+  validation workload
 
 The study did not directly measure:
 
@@ -229,8 +421,12 @@ The study did not directly measure:
 - Denial-of-service resistance
 - Key compromise
 - Quantum resistance
-- Homomorphic computation
 - Production-grade FHE performance
+- General-purpose or arbitrary homomorphic computation
+- Real-world healthcare deployment performance
+
+The RSA-SHE encrypted MAP-numerator workload was not treated as an additional SPSS
+dependent variable.
 
 Results should therefore be interpreted as implementation-specific measurements from the
-controlled Version 2 simulation.
+controlled Version 2 simulation and documented study computer.
