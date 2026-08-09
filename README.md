@@ -1,5 +1,7 @@
 # IoMT Encryption Simulation
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21845613.svg)](https://doi.org/10.5281/zenodo.21845613)
+
 ## Version 2
 
 This repository contains the Python scripts, synthetic source data, measurement results, validation evidence, SPSS analysis files, and supporting documentation used for my doctoral dissertation:
